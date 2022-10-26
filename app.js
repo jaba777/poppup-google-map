@@ -1,4 +1,9 @@
 const containerPopup=document.querySelector('.container-poppup');
+let addContainer=document.querySelector('.add-container');
+const errorPopup=document.querySelector('.error-popup');
+
+
+let popupArray=[];
 
 function initMap(){
 
@@ -31,7 +36,7 @@ function initMap(){
             <div class="modal-content">
               <div class="modal-header">
                 <h3 class="modal-title">${property.info.title}</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close close-btn " data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -39,25 +44,78 @@ function initMap(){
               <img src=${property.info.image} alt=${property.info.title} />
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary add-btn">Add</button>
                 <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>
         `
-
-        
-        
-
             containerPopup.classList.add('visible');
 
-            const closeBtn=document.querySelector('.modal-footer .close-btn');
-            closeBtn.addEventListener('click',()=>{
+            const closeBtn=document.querySelectorAll('.close-btn');
+            const addBtn=document.querySelector('.add-btn');
+
+            closeBtn.forEach(close=>{
+              close.addEventListener('click',()=>{
                 containerPopup.classList.remove('visible');
-         })
+              })
+            })
+
+            addBtn.addEventListener('click',()=>{
+
+              let propertyfinder=popupArray.find(item=> item.title === property.info.title);
+              
+                if(!propertyfinder){
+                  popupArray.push(property.info);
+                } else{
+                  errorPopup.classList.add('appear');
+                }
+
+                console.log(popupArray)
+                
+                 let popupArrayMap=popupArray.map(item=>{
+                  return(
+                  `<div class="add-box">
+                  <div class="box-remove-btn">
+                     <button class='remove-box' onclick="removeItem(${item.title})">
+                         <span><i class="fas fa-times"></i></span>
+                     </button>
+                  </div>
+             
+                  <div class="title">
+                     <h1>${item.title}</h1>
+                  </div>
+             
+                  <div class="input">
+                     <input type="date">
+                  </div>
+             
+                  <div class="image">
+                     <img src=${item.image} alt="" />
+                  </div>
+                 
+                  </div>`
+                  )
+                 })
+
+                 
+
+                  
+              addContainer.innerHTML=popupArrayMap;
+                       
+             containerPopup.classList.remove('visible');
+              
+            })
+
+            
+
        
      })
 
+    }
+
+    function removeItem(id){
+      popupArray = popupArray.filter(item=>item.title!=id);
     }
 
     let MarkerArray=[
@@ -75,3 +133,10 @@ function initMap(){
 }
 
 
+
+
+
+
+document.querySelector('.error-close').addEventListener('click',()=>{
+  errorPopup.classList.remove('appear');
+})
