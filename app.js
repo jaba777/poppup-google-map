@@ -71,37 +71,41 @@ function initMap(){
                   errorPopup.classList.add('appear');
                 }
 
+
+
                 console.log(popupArray)
-                
-                 let popupArrayMap=popupArray.map(item=>{
-                  return(
-                  `<div class="add-box">
+
+                addContainer.innerHTML=" ";
+            
+                popupArray.forEach((product)=>{
+                  addContainer.innerHTML+=`
+                  <div class="add-box">
                   <div class="box-remove-btn">
-                     <button class='remove-box' onclick="removeItem(${item.title})">
+                     <button class='remove-box'  onclick="removeClass(${product.id})">
                          <span><i class="fas fa-times"></i></span>
                      </button>
                   </div>
-             
+              
                   <div class="title">
-                     <h1>${item.title}</h1>
+                     <h1>${product.title}</h1>
                   </div>
-             
+              
                   <div class="input">
                      <input type="date">
                   </div>
-             
+              
                   <div class="image">
-                     <img src=${item.image} alt="" />
+                     <img src=${product.image} alt="" />
                   </div>
                  
-                  </div>`
-                  )
+                  </div>
+                  `;
+              
                  })
-
-                 
-
-                  
-              addContainer.innerHTML=popupArrayMap;
+                
+                
+                
+                
                        
              containerPopup.classList.remove('visible');
               
@@ -114,15 +118,13 @@ function initMap(){
 
     }
 
-    function removeItem(id){
-      popupArray = popupArray.filter(item=>item.title!=id);
-    }
+   
 
     let MarkerArray=[
-        {location: {lat: 41.7151, lng: 44.8271},info: {image: './Img/tbilisi.jpg',title: 'Tbilisi'}},
-        {location: {lat: 42.2662, lng: 42.7180},info: {image: './Img/kutaisi.jpg',title: 'Kutaisi'}},
-        {location: {lat: 41.6168, lng: 41.6367},info: {image: './Img/batumi.jpg',title: 'Batumi'}},
-        {location: {lat: 42.3420, lng: 43.4106},info: {image: './Img/sachkhere.jpg',title: 'Sachkhere'}},
+        {location: {lat: 41.7151, lng: 44.8271},info: {id: 1,image: './Img/tbilisi.jpg',title: 'Tbilisi'}},
+        {location: {lat: 42.2662, lng: 42.7180},info: {id: 2,image: './Img/kutaisi.jpg',title: 'Kutaisi'}},
+        {location: {lat: 41.6168, lng: 41.6367},info: {id: 3, image: './Img/batumi.jpg',title: 'Batumi'}},
+        {location: {lat: 42.3420, lng: 43.4106},info: {id: 4, image: './Img/sachkhere.jpg',title: 'Sachkhere'}},
     ];
 
     for(let i=0; i<MarkerArray.length; i++){
@@ -134,6 +136,36 @@ function initMap(){
 
 
 
+function removeClass(products){
+  popupArray=popupArray.filter(item=>item.id!==products);
+  addContainer.innerHTML=" ";
+  popupArray.forEach((product)=>{
+    addContainer.innerHTML+=`
+    <div class="add-box">
+    <div class="box-remove-btn">
+       <button class='remove-box'  onclick="removeClass(${product.id})">
+           <span><i class="fas fa-times"></i></span>
+       </button>
+    </div>
+
+    <div class="title">
+       <h1>${product.title}</h1>
+    </div>
+
+    <div class="input">
+       <input type="date">
+    </div>
+
+    <div class="image">
+       <img src=${product.image} alt="" />
+    </div>
+   
+    </div>
+    `;
+
+   })
+  
+}
 
 
 
