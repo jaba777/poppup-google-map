@@ -3,7 +3,11 @@ let addContainer=document.querySelector('.add-container');
 const errorPopup=document.querySelector('.error-popup');
 
 
-let popupArray=[];
+let popupArray= [];
+
+let inputsArray=[];
+
+let inputTarget='';
 
 function initMap(){
 
@@ -73,39 +77,9 @@ function initMap(){
 
 
 
-                console.log(popupArray)
+               
 
-                addContainer.innerHTML=" ";
-            
-                popupArray.forEach((product)=>{
-                  addContainer.innerHTML+=`
-                  <div class="add-box">
-                  <div class="box-remove-btn">
-                     <button class='remove-box'  onclick="removeClass(${product.id})">
-                         <span><i class="fas fa-times"></i></span>
-                     </button>
-                  </div>
-              
-                  <div class="title">
-                     <h1>${product.title}</h1>
-                  </div>
-              
-                  <div class="input">
-                     <input type="date">
-                  </div>
-              
-                  <div class="image">
-                     <img src=${product.image} alt="" />
-                  </div>
-                 
-                  </div>
-                  `;
-              
-                 })
-                
-                
-                
-                
+                updateCart();
                        
              containerPopup.classList.remove('visible');
               
@@ -138,8 +112,17 @@ function initMap(){
 
 function removeClass(products){
   popupArray=popupArray.filter(item=>item.id!==products);
+  updateCart();
+}
+
+
+
+
+
+function updateCart(){
   addContainer.innerHTML=" ";
   popupArray.forEach((product)=>{
+    
     addContainer.innerHTML+=`
     <div class="add-box">
     <div class="box-remove-btn">
@@ -153,7 +136,7 @@ function removeClass(products){
     </div>
 
     <div class="input">
-       <input type="date">
+    
     </div>
 
     <div class="image">
@@ -163,8 +146,91 @@ function removeClass(products){
     </div>
     `;
 
+    localStorage.setItem('INPUTBOX',JSON.stringify(inputsArray));
+
+    inputsDate();
+
    })
+
+   
+
+   
+
+}
+
+let counter=0;
+
+function inputsDate(){
+  let input=document.createElement('input');
+  input.setAttribute("type", "date");
+ 
+
+
+ let inpuTS= document.querySelectorAll('.input');
+ for(let i=0; i<inpuTS.length;i++){
+  inpuTS[i].appendChild(input);
+ }
+ numberInputs();
+}
+
+let onChangeinput =function(event){
+  //inputTarget=new Date (event.target.value);
+ 
+  inputTarget=event.target.value;
   
+}
+
+let inputboxes=localStorage.getItem('INPUTBOX') || [];
+
+
+
+function numberInputs(){
+  
+  let inputNumber=document.querySelectorAll('input');
+
+if(!inputsArray.includes(inputTarget)){
+  inputsArray.push(inputTarget);
+}
+
+let InputTargetDate =new Date(inputTarget)
+let year = InputTargetDate.getFullYear();
+let month = InputTargetDate.getMonth()+1;
+let day = InputTargetDate.getDate()+1;
+if(month <10){
+  month='0'+month
+}
+
+if(day <10){
+  day='0'+day
+}
+
+let fullDate = year+'-'+month+'-'+day
+
+ 
+
+  for(let i=0;i<inputNumber.length;i++){
+    
+    if(i==0){
+      inputNumber[i].setAttribute('min','2022-02-09');
+      inputNumber[i].addEventListener('input',onChangeinput);
+      inputNumber[i].value= inputsArray[i+1];
+    }
+    else{
+
+      inputNumber[i].addEventListener('input',onChangeinput);
+      inputNumber[i].setAttribute('min', fullDate);
+      inputNumber[i].value= inputsArray [i+1];
+
+    }
+
+   
+      
+    }
+   
+  
+    
+    
+
 }
 
 
@@ -172,3 +238,4 @@ function removeClass(products){
 document.querySelector('.error-close').addEventListener('click',()=>{
   errorPopup.classList.remove('appear');
 })
+
