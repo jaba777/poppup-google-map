@@ -110,10 +110,7 @@ function initMap(){
 
 
 
-function removeClass(products){
-  popupArray=popupArray.filter(item=>item.id!==products);
-  updateCart();
-}
+
 
 
 
@@ -121,12 +118,12 @@ function removeClass(products){
 
 function updateCart(){
   addContainer.innerHTML=" ";
-  popupArray.forEach((product)=>{
+  popupArray.forEach((product,index)=>{
     
     addContainer.innerHTML+=`
     <div class="add-box">
     <div class="box-remove-btn">
-       <button class='remove-box'  onclick="removeClass(${product.id})">
+       <button class='remove-box'  onclick="removeClass(${product.id},${index})">
            <span><i class="fas fa-times"></i></span>
        </button>
     </div>
@@ -146,7 +143,7 @@ function updateCart(){
     </div>
     `;
 
-    localStorage.setItem('INPUTBOX',JSON.stringify(inputsArray));
+    
 
     inputsDate();
 
@@ -180,7 +177,52 @@ let onChangeinput =function(event){
   
 }
 
-let inputboxes=localStorage.getItem('INPUTBOX') || [];
+
+function removeClass(products,index){
+
+  let inputNumber=document.querySelectorAll('input');
+
+  popupArray=popupArray.filter(item=>item.id!==products);
+  updateCart();
+  inputsArray=inputsArray.filter(item=>item!==inputsArray[index+1])
+
+  
+let InputTargetDate =new Date(popupArray[popupArray.length-1])
+let year = InputTargetDate.getFullYear();
+let month = InputTargetDate.getMonth()+1;
+let day = InputTargetDate.getDate()+1;
+if(month <10){
+  month='0'+month
+}
+
+if(day <10){
+  day='0'+day
+}
+
+let fullDate = year+'-'+month+'-'+day;
+
+ 
+
+  for(let i=0;i<inputNumber.length;i++){
+    
+    if(i==0){
+      inputNumber[i].setAttribute('min','2022-02-09');
+      inputNumber[i].addEventListener('input',onChangeinput);
+      inputNumber[i].value= inputsArray[i+1];
+    }
+    else{
+
+      inputNumber[i].addEventListener('input',onChangeinput);
+      inputNumber[i].setAttribute('min', fullDate);
+      inputNumber[i].value= inputsArray [i+1];
+
+    }
+
+   
+      
+}
+  
+}
 
 
 
@@ -204,7 +246,7 @@ if(day <10){
   day='0'+day
 }
 
-let fullDate = year+'-'+month+'-'+day
+let fullDate = year+'-'+month+'-'+day;
 
  
 
