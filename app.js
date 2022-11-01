@@ -129,22 +129,43 @@ let onChangeinput =function(event){
 }
 
 
-function removeClass(products){
+function removeClass(products,index){
   popupArray=popupArray.filter(item=>item.id!==products);
   updateCart();
 
-  //inputsArray=inputsArray.filter()
+  let inputNumber=document.querySelectorAll('input');
+
+      if(index == popupArray.length){
+        inputsArray=inputsArray.filter(item => item !== inputsArray[index+1] && item !== inputsArray[index+2]);
+      } else{
+        inputsArray=inputsArray.filter(item => item !== inputsArray[index+1] && item !== inputsArray[inputsArray.length]);
+      }
+    
+      inputTarget=inputsArray[inputsArray.length-1];
+
+       for(let i=0; i<inputNumber.length;i++){
+        inputNumber[i].setAttribute('min',inputsArray[i+1]);
+        inputNumber[i].addEventListener('input',onChangeinput);
+        inputNumber[i].value= inputsArray[i+1];
+       }
+
+     
+
+     
+
+  console.log(inputsArray,index,popupArray.length,inputsArray.length)
+  
 }
 
 
 function updateCart(){
   addContainer.innerHTML=" ";
-  popupArray.forEach((product)=>{
+  popupArray.forEach((product,index)=>{
     
     addContainer.innerHTML+=`
     <div class="add-box">
     <div class="box-remove-btn">
-       <button class='remove-box'  onclick="removeClass(${product.id})">
+       <button class='remove-box'  onclick="removeClass(${product.id},${index})">
            <span><i class="fas fa-times"></i></span>
        </button>
     </div>
@@ -195,7 +216,7 @@ if(!inputsArray.includes(inputTarget)){
   inputsArray.push(inputTarget);
 }
 
-let InputTargetDate =new Date(inputTarget)
+let InputTargetDate =new Date(inputsArray[inputsArray.length-1]);
 let year = InputTargetDate.getFullYear();
 let month = InputTargetDate.getMonth()+1;
 let day = InputTargetDate.getDate()+1;
