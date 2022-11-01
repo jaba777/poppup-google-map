@@ -116,14 +116,35 @@ function initMap(){
 
 
 
+
+
+let counter=0;
+
+
+let onChangeinput =function(event){
+  //inputTarget=new Date (event.target.value);
+ 
+  inputTarget=event.target.value;
+  
+}
+
+
+function removeClass(products){
+  popupArray=popupArray.filter(item=>item.id!==products);
+  updateCart();
+
+  //inputsArray=inputsArray.filter()
+}
+
+
 function updateCart(){
   addContainer.innerHTML=" ";
-  popupArray.forEach((product,index)=>{
+  popupArray.forEach((product)=>{
     
     addContainer.innerHTML+=`
     <div class="add-box">
     <div class="box-remove-btn">
-       <button class='remove-box'  onclick="removeClass(${product.id}">
+       <button class='remove-box'  onclick="removeClass(${product.id})">
            <span><i class="fas fa-times"></i></span>
        </button>
     </div>
@@ -148,14 +169,8 @@ function updateCart(){
     inputsDate();
 
    })
-
    
-
-   
-
 }
-
-let counter=0;
 
 function inputsDate(){
   let input=document.createElement('input');
@@ -168,23 +183,6 @@ function inputsDate(){
   inpuTS[i].appendChild(input);
  }
  numberInputs();
-}
-
-let onChangeinput =function(event){
-  //inputTarget=new Date (event.target.value);
- 
-  inputTarget=event.target.value;
-  
-}
-
-
-function removeClass(products){
-
-  let inputNumber=document.querySelectorAll('input');
-
-  popupArray=popupArray.filter(item=>item.id!==products);
-  updateCart();
-  
 }
 
 
